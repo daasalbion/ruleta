@@ -25,9 +25,6 @@ var wheel = {
     upTime : 3000, // How long to spin up for (in ms)
     downTime : 3000, // How long to slow down for (in ms)
 
-    maxAngleDelta : 0,
-    valorReduccion : 0,
-
     spinStart : 0,
 
     frames : 0,
@@ -70,8 +67,6 @@ var wheel = {
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2);
 
             wheel.angleDelta = wheel.maxSpeed * progress;
-
-            wheel.maxAngleDelta = wheel.angleDelta;
 
         } else {
 
