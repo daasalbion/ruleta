@@ -22,8 +22,8 @@ var wheel = {
 
     maxSpeed : Math.PI / 16,
 
-    upTime : 100, // How long to spin up for (in ms)
-    downTime : 500+100, // How long to slow down for (in ms)
+    upTime : 100,// +5*100, // How long to spin up for (in ms)
+    downTime : 600+100,//+5*600, // How long to slow down for (in ms)
 
     spinStart : 0,
 
@@ -192,11 +192,20 @@ var wheel = {
     },
 
     calcularTiempo : function() {
+        var mapeo_angulos = [10,9,8,7,6,5,4,3,2,1];
         var angulo_esperado = wheel.angles[wheel.valorEsperado]
         console.log("mirar el angulo esperado: " + angulo_esperado);
         var tiempo = angulo_esperado/wheel.maxSpeed;
-        wheel.upTime = (tiempo/2)*100;
-        wheel.downTime = (tiempo/2)*100 + 100;
+
+        if(tiempo == 0){
+
+            tiempo = 5*10;
+
+        }
+
+        console.log("tiempo: " + tiempo);
+        wheel.upTime = (tiempo/2)*wheel.timerDelay;
+        wheel.downTime = (tiempo/2)*wheel.timerDelay + wheel.timerDelay + 5*1000;
     },
 
     drawNeedle : function() {
