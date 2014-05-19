@@ -2,7 +2,7 @@
 var wheel = {
 
     timerHandle : 0,
-    timerDelay : 20,
+    timerDelay : 100,
 
     angleCurrent : 0,
     angleDelta : 0,
@@ -22,8 +22,8 @@ var wheel = {
 
     maxSpeed : Math.PI / 16,
 
-    upTime : 3000, // How long to spin up for (in ms)
-    downTime : 3000, // How long to slow down for (in ms)
+    upTime : 100, // How long to spin up for (in ms)
+    downTime : 500+100, // How long to slow down for (in ms)
 
     spinStart : 0,
 
@@ -32,16 +32,28 @@ var wheel = {
     centerX : 500,
     centerY : 200,
 
+    valorEsperado : 0,
+
     spin : function() {
 
+        wheel.angleCurrent = 0;
         // Start the wheel only if it's not already spinning
         if (wheel.timerHandle == 0) {
             //wheel.spinStart = new Date().getTime();
-            wheel.maxSpeed = Math.PI / (16 + Math.random()); // Randomly vary how hard the spin is
+            //wheel.maxSpeed = Math.PI / (16 + Math.random()); // Randomly vary how hard the spin is
+            wheel.maxSpeed = Math.PI/5
             wheel.frames = 0;
-            wheel.sound.play();
+            //wheel.sound.play();
 
-            console.log("angulos: " + wheel.angles);
+            console.log("angulos iniciales: " + wheel.angles);
+            console.log("valor esperado: " + wheel.valorEsperado);
+            console.log("tiempo calculado uptime: " + wheel.upTime);
+            console.log("tiempo calculado downtime: " + wheel.downTime);
+
+            wheel.calcularTiempo();
+
+            console.log("tiempo calculado uptime: " + wheel.upTime);
+            console.log("tiempo calculado downtime: " + wheel.downTime);
 
             wheel.timerHandle = setInterval(wheel.onTimerTick, wheel.timerDelay);
         }
@@ -49,6 +61,7 @@ var wheel = {
 
     onTimerTick : function() {
 
+        console.log("angulos en movimiento: " + wheel.angles);
         wheel.frames++;
         wheel.draw();
 
@@ -66,23 +79,23 @@ var wheel = {
             progress = duration / (wheel.upTime + wheel.downTime);
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2);
 
-            wheel.angleDelta = wheel.maxSpeed * progress;
+            wheel.angleDelta = wheel.maxSpeed;// * progress;
 
         } else {
 
             //finished = true;
-            console.log("desacelerando............................");
+            //console.log("desacelerando............................");
 
             progress = duration / (wheel.upTime + wheel.downTime);
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2 + Math.PI / 2);
 
-            wheel.angleDelta =  wheel.maxSpeed*(1-progress);
+            wheel.angleDelta =  wheel.maxSpeed;//*(1-progress);
 
             if (progress >= 1)
                 finished = true;
         }
 
-        console.log("angleDelta: " + wheel.angleDelta);
+        //console.log("angleDelta: " + wheel.angleDelta);
 
         wheel.angleCurrent += wheel.angleDelta;
 
@@ -101,7 +114,6 @@ var wheel = {
             $("#counter").html((wheel.frames / duration * 1000) + " FPS");
         }
 
-
          // Display RPM
          var rpm = (wheel.angleDelta * (1000 / wheel.timerDelay) * 60) / (Math.PI * 2);
          $("#counter2").html( Math.round(rpm) + " RPM" );
@@ -110,7 +122,7 @@ var wheel = {
     init : function(optionList) {
         try {
             wheel.initWheel();
-            wheel.initAudio();
+            //wheel.initAudio();
             wheel.initCanvas();
             wheel.draw();
 
@@ -151,6 +163,7 @@ var wheel = {
         //var r = Math.floor(Math.random() * wheel.segments.length);
         var r = 0;
         //wheel.angleCurrent = ((r + 0.5) / wheel.segments.length) * Math.PI * 2;
+        wheel.angleCurrent = r;
 
         var segments = wheel.segments;
         var len      = segments.length;
@@ -176,6 +189,14 @@ var wheel = {
     clear : function() {
         var ctx = wheel.canvasContext;
         ctx.clearRect(0, 0, 1000, 800);
+    },
+
+    calcularTiempo : function() {
+        var angulo_esperado = wheel.angles[wheel.valorEsperado]
+        console.log("mirar el angulo esperado: " + angulo_esperado);
+        var tiempo = angulo_esperado/wheel.maxSpeed;
+        wheel.upTime = (tiempo/2)*100;
+        wheel.downTime = (tiempo/2)*100 + 100;
     },
 
     drawNeedle : function() {
@@ -296,7 +317,7 @@ var wheel = {
         ctx.lineWidth   = 10;
         ctx.strokeStyle = '#000000';
         ctx.stroke();
-    },
+    }
 }
 
 window.onload = function() {
@@ -315,3 +336,16 @@ window.onload = function() {
         window.scrollTo(0, 1);
     }, 0);
 }
+
+$(document).ready(function(){
+
+    $('#confirmar_valor').click(
+        function(){
+            var angulos = [9, 8, 7, 6, 5, 4, 3 ,2 , 1 , 0]
+            //wheel.valorEsperado = angulos[$('#valor_esperado').val()];
+            wheel.valorEsperado = $('#valor_esperado').val();
+
+            alert(wheel.valorEsperado);
+        }
+    )
+})
