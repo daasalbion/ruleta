@@ -2,6 +2,7 @@
 var wheel = {
 
     timerHandle : 0,
+    iterationsHandle: 0,
     timerDelay : 100,
 
     angleCurrent : 0,
@@ -33,29 +34,47 @@ var wheel = {
     centerY : 200,
 
     valorEsperado : 0,
+    valoresEsperados : [1,8,5,9,2],
+    contadorIterations : 0,
+    angulos: [],
 
     spin : function() {
 
-        wheel.angleCurrent = 0;
+        wheel.contadorIterations++;
+        console.log("numero de iteraciones: " + wheel.contadorIterations);
         // Start the wheel only if it's not already spinning
-        if (wheel.timerHandle == 0) {
-            //wheel.spinStart = new Date().getTime();
-            //wheel.maxSpeed = Math.PI / (16 + Math.random()); // Randomly vary how hard the spin is
-            wheel.maxSpeed = Math.PI/5
-            wheel.frames = 0;
-            //wheel.sound.play();
+        if(wheel.contadorIterations > wheel.valoresEsperados.length){
 
-            console.log("angulos iniciales: " + wheel.angles);
-            console.log("valor esperado: " + wheel.valorEsperado);
-            console.log("tiempo calculado uptime: " + wheel.upTime);
-            console.log("tiempo calculado downtime: " + wheel.downTime);
+            clearInterval(wheel.iterationsHandle);
+            wheel.contadorIterations = 0;
 
-            wheel.calcularTiempo();
+        }else{
 
-            console.log("tiempo calculado uptime: " + wheel.upTime);
-            console.log("tiempo calculado downtime: " + wheel.downTime);
+            var angulos = [10, 9, 8, 7, 6, 5, 4 , 3 , 2 , 1];
+            var indice = wheel.valoresEsperados[wheel.contadorIterations];
+            console.log("indice:" + indice);
 
-            wheel.timerHandle = setInterval(wheel.onTimerTick, wheel.timerDelay);
+            wheel.valorEsperado = angulos[indice];
+
+            if (wheel.timerHandle == 0) {
+                //wheel.spinStart = new Date().getTime();
+                //wheel.maxSpeed = Math.PI / (16 + Math.random()); // Randomly vary how hard the spin is
+                wheel.maxSpeed = Math.PI/5
+                wheel.frames = 0;
+
+                console.log("angulo actual: " + wheel.angleCurrent);
+                console.log("angulos iniciales: " + wheel.angles);
+                console.log("valor esperado: " + wheel.valorEsperado);
+                console.log("tiempo calculado uptime: " + wheel.upTime);
+                console.log("tiempo calculado downtime: " + wheel.downTime);
+
+                wheel.calcularTiempo();
+
+                console.log("tiempo calculado uptime: " + wheel.upTime);
+                console.log("tiempo calculado downtime: " + wheel.downTime);
+
+                wheel.timerHandle = setInterval(wheel.onTimerTick, wheel.timerDelay);
+            }
         }
     },
 
@@ -108,6 +127,7 @@ var wheel = {
         if (finished) {
 
             clearInterval(wheel.timerHandle);
+            wheel.angleCurrent -= wheel.angleDelta;
             wheel.timerHandle = 0;
             wheel.angleDelta = 0;
             wheel.spinStart = 0;
@@ -149,8 +169,12 @@ var wheel = {
             canvas = G_vmlCanvasManager.initElement(canvas);
         }
 
-        canvas.addEventListener("click", wheel.spin, false);
+        canvas.addEventListener("click", wheel.initIterations, false);
         wheel.canvasContext = canvas.getContext("2d");
+    },
+
+    initIterations: function() {
+        wheel.iterationsHandle = setInterval(wheel.spin, 10000);
     },
 
     initWheel : function() {
@@ -192,17 +216,24 @@ var wheel = {
     },
 
     calcularTiempo : function() {
-        var angulo_esperado = wheel.angles[wheel.valorEsperado]
+        console.log("MIRAR:" + wheel.angulos[wheel.valoresEsperados[wheel.contadorIterations-1]]);
+        //var angulo_esperado = wheel.angles[wheel.valorEsperado]
+        var angulo_esperado = wheel.angulos[wheel.valoresEsperados[wheel.contadorIterations-1]];
         console.log("mirar el angulo esperado: " + angulo_esperado);
-        var tiempo = angulo_esperado/wheel.maxSpeed;
-
+        console.log("angulo actual: " + wheel.angleCurrent);
+        //asumiendo que empieza siempre en cero
+        var tiempo = (angulo_esperado - wheel.angleCurrent)/wheel.maxSpeed;
+        //alert("mirar el tiempo: " + tiempo);
+        //si algo requerido es el mismo entonces doy 5 vueltas para caer en el mismo
         if(tiempo == 0){
 
             tiempo = 5*10;
         }
 
         console.log("tiempo: " + tiempo);
+
         wheel.upTime = (tiempo/2)*wheel.timerDelay;
+                                                                          //le agrego siempre 5 vueltas
         wheel.downTime = (tiempo/2)*wheel.timerDelay + wheel.timerDelay + 5*1000;
     },
 
@@ -300,12 +331,22 @@ var wheel = {
         ctx.textAlign    = "center";
         ctx.font         = "1.4em Arial";
 
+        //angulos: [10, 9, 8, 7, 6, 5, 4 , 3 , 2 , 1],
         for (var i = 1; i <= len; i++) {
             var angle = PI2 * (i / len) + angleCurrent;
             wheel.drawSegment(i - 1, lastAngle, angle);
             wheel.angles[i] = lastAngle;
+            //guardo el orden de los angulos guardados
+            var j = wheel.segments.length - Math.floor((lastAngle / (Math.PI * 2))	* wheel.segments.length) - 1;
+            if(j<0)
+                j = len - (-1)*j;
+            wheel.angulos[j] = wheel.angles[i];
+
             lastAngle = angle;
         }
+
+        console.log("angles: " + wheel.angles);
+        console.log("angulos: " + wheel.angulos);
         // Draw a center circle
         ctx.beginPath();
         ctx.arc(centerX, centerY, 20, 0, PI2, false);
