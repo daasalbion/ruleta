@@ -192,7 +192,6 @@ var wheel = {
     },
 
     calcularTiempo : function() {
-        var mapeo_angulos = [10,9,8,7,6,5,4,3,2,1];
         var angulo_esperado = wheel.angles[wheel.valorEsperado]
         console.log("mirar el angulo esperado: " + angulo_esperado);
         var tiempo = angulo_esperado/wheel.maxSpeed;
@@ -348,12 +347,13 @@ window.onload = function() {
 $(document).ready(function(){
 
     $('#confirmar_valor').click(
-        function(){      //0  1  2  3  4  5  6  7   8   9
-            var angulos = [9, 8, 7, 6, 5, 4, 3 ,2 , 1 , 0]
-            //wheel.valorEsperado = angulos[$('#valor_esperado').val()];
-            wheel.valorEsperado = $('#valor_esperado').val();
+        function(){      //0  1  2  3  4  5  6   7   8   9
+            var angulos = [10, 9, 8, 7, 6, 5, 4 , 3 , 2 , 1]
+            var indice = $('#valor_esperado').val();
+            wheel.valorEsperado = angulos[indice];
+            //wheel.valorEsperado = $('#valor_esperado').val();
 
-            alert(wheel.valorEsperado);
+            //alert(wheel.valorEsperado);
         }
     )
 })
