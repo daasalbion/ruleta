@@ -34,7 +34,7 @@ var wheel = {
     centerY : 200,
 
     valorEsperado : 0,
-    valoresEsperados : [1,8,5,9,2],
+    valoresEsperados : [1,2,3,4,5],
     contadorIterations : 0,
     angulos: [],
 
@@ -50,12 +50,6 @@ var wheel = {
 
         }else{
 
-            var angulos = [10, 9, 8, 7, 6, 5, 4 , 3 , 2 , 1];
-            var indice = wheel.valoresEsperados[wheel.contadorIterations];
-            console.log("indice:" + indice);
-
-            wheel.valorEsperado = angulos[indice];
-
             if (wheel.timerHandle == 0) {
                 //wheel.spinStart = new Date().getTime();
                 //wheel.maxSpeed = Math.PI / (16 + Math.random()); // Randomly vary how hard the spin is
@@ -64,7 +58,6 @@ var wheel = {
 
                 console.log("angulo actual: " + wheel.angleCurrent);
                 console.log("angulos iniciales: " + wheel.angles);
-                console.log("valor esperado: " + wheel.valorEsperado);
                 console.log("tiempo calculado uptime: " + wheel.upTime);
                 console.log("tiempo calculado downtime: " + wheel.downTime);
 
@@ -234,7 +227,7 @@ var wheel = {
 
         wheel.upTime = (tiempo/2)*wheel.timerDelay;
                                                                           //le agrego siempre 5 vueltas
-        wheel.downTime = (tiempo/2)*wheel.timerDelay + wheel.timerDelay + 5*1000;
+        wheel.downTime = (tiempo/2)*wheel.timerDelay + wheel.timerDelay + 5*10*wheel.timerDelay;
     },
 
     drawNeedle : function() {
@@ -392,9 +385,6 @@ $(document).ready(function(){
             var angulos = [10, 9, 8, 7, 6, 5, 4 , 3 , 2 , 1]
             var indice = $('#valor_esperado').val();
             wheel.valorEsperado = angulos[indice];
-            //wheel.valorEsperado = $('#valor_esperado').val();
-
-            //alert(wheel.valorEsperado);
         }
     )
 })
