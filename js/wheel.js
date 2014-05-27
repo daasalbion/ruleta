@@ -33,7 +33,6 @@ var wheel = {
     centerX : 500,
     centerY : 200,
 
-    valorEsperado : 0,
     valoresEsperados : [1,2,3,4,5],
     contadorIterations : 0,
     angulos: [],
@@ -90,6 +89,8 @@ var wheel = {
 
             progress = duration / (wheel.upTime + wheel.downTime);
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2);
+            //mirar
+            console.log( "RAMDOM: " + ((Math.random() * (Math.PI/6)) + 0)/10);
 
             wheel.angleDelta = wheel.maxSpeed;// * progress;
 
@@ -120,6 +121,7 @@ var wheel = {
         if (finished) {
 
             clearInterval(wheel.timerHandle);
+            //seteo bien el ultimo valor que aumenta al pedo
             wheel.angleCurrent -= wheel.angleDelta;
             wheel.timerHandle = 0;
             wheel.angleDelta = 0;
@@ -135,7 +137,6 @@ var wheel = {
     init : function(optionList) {
         try {
             wheel.initWheel();
-            //wheel.initAudio();
             wheel.initCanvas();
             wheel.draw();
 
@@ -145,12 +146,6 @@ var wheel = {
             alert('Wheel is not loaded ' + exceptionData);
         }
 
-    },
-
-    initAudio : function() {
-        var sound = document.createElement('audio');
-        sound.setAttribute('src', 'wheel.mp3');
-        wheel.sound = sound;
     },
 
     initCanvas : function() {
@@ -210,7 +205,6 @@ var wheel = {
 
     calcularTiempo : function() {
         console.log("MIRAR:" + wheel.angulos[wheel.valoresEsperados[wheel.contadorIterations-1]]);
-        //var angulo_esperado = wheel.angles[wheel.valorEsperado]
         var angulo_esperado = wheel.angulos[wheel.valoresEsperados[wheel.contadorIterations-1]];
         console.log("mirar el angulo esperado: " + angulo_esperado);
         console.log("angulo actual: " + wheel.angleCurrent);
@@ -384,7 +378,6 @@ $(document).ready(function(){
         function(){      //0  1  2  3  4  5  6   7   8   9
             var angulos = [10, 9, 8, 7, 6, 5, 4 , 3 , 2 , 1]
             var indice = $('#valor_esperado').val();
-            wheel.valorEsperado = angulos[indice];
         }
     )
 })
