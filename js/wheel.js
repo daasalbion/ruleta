@@ -30,7 +30,7 @@ var wheel = {
 
     frames : 0,
 
-    centerX : 500,
+    centerX : 200,
     centerY : 200,
 
     valoresEsperados : [1,2,3,4,5],
@@ -129,9 +129,9 @@ var wheel = {
             $("#counter").html((wheel.frames / duration * 1000) + " FPS");
         }
 
-         // Display RPM
-         var rpm = (wheel.angleDelta * (1000 / wheel.timerDelay) * 60) / (Math.PI * 2);
-         $("#counter2").html( Math.round(rpm) + " RPM" );
+        // Display RPM
+        var rpm = (wheel.angleDelta * (1000 / wheel.timerDelay) * 60) / (Math.PI * 2);
+        $("#counter2").html( Math.round(rpm) + " RPM" );
     },
 
     init : function(optionList) {
@@ -220,7 +220,7 @@ var wheel = {
         console.log("tiempo: " + tiempo);
 
         wheel.upTime = (tiempo/2)*wheel.timerDelay;
-                                                                          //le agrego siempre 5 vueltas
+        //le agrego siempre 5 vueltas
         wheel.downTime = (tiempo/2)*wheel.timerDelay + wheel.timerDelay + 5*10*wheel.timerDelay;
     },
 
@@ -356,20 +356,29 @@ var wheel = {
 }
 
 window.onload = function() {
-    wheel.init();
 
+    wheel.init();
+    //array asociativo para cargar los valores estaticamente en la tombola
+    var venues = {
+        "116208"  : "0",
+        "66271"   : "1",
+        "5518"    : "2",
+        "392360"  : "3",
+        "2210952" : "4",
+        "207306"  : "5",
+        "41457"   : "6",
+        "101161"  : "7",
+        "257424"  : "8",
+        "512060"  : "9"
+    };
     var segments = new Array();
-    $.each($('#venues input:checked'), function(key, cbox) {
-        segments.push( cbox.value );
+
+    $.each(venues, function(key, value) {
+        segments.push( value );
     });
 
     wheel.segments = segments;
     wheel.update();
-
-    // Hide the address bar (for mobile devices)!
-    setTimeout(function() {
-        window.scrollTo(0, 1);
-    }, 0);
 }
 
 $(document).ready(function(){
