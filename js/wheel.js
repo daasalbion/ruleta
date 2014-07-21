@@ -380,4 +380,10 @@ window.onload = function() {
     console.log("numeros ganadores: " + wheel.valoresEsperados);
     wheel.segments = segments;
     wheel.update();
+
+
+
 }
+
+
+

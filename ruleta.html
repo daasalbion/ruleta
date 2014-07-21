@@ -2,24 +2,26 @@
 <html>
     <head>
         <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta charset="utf-8">
         <title>Lunch Wheel</title>
         <link href="css/reset.css" type="text/css" rel="stylesheet">
         <script type="text/javascript" src="js/jquery-1.7.min.js"></script>
         <!--        //utils-->
         <script type="text/javascript" src="js/utils.js"></script>
         <!--        //wheel-->
-        <script type="text/javascript" src="js/wheel.js"></script>
+        <script type="text/javascript" src="js/jquery.wheel.js"></script>
     </head>
     <body>
-        <div id="wheel">
+        <div id="wheel" class="wheel">
             <canvas id="canvas" width="400" height="400"></canvas>
         </div>
         <div id="stats">
             <div id="counter"></div>
             <div id="counter2"></div>
         </div>
-        <div id="numeros_sorteados">
-            </p>
-        </div>
+    <div id="boton_iniciar">
+        <button id="iniciar">Iniciar</button>
+    </div>
     </body>
 </html>
