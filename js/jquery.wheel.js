@@ -2,7 +2,9 @@
 (function($) {
     var Wheel = function(options){
 
-        var defaultSettings = { timerHandle : 0,
+        var defaultSettings = {
+
+            timerHandle : 0,
             iterationsHandle: 0,
             timerDelay : 100,
 
@@ -457,7 +459,6 @@
     }
 })(jQuery);
 
-
 $(document).ready(function(){
 
     tombola = $('.wheel');
@@ -465,7 +466,8 @@ $(document).ready(function(){
     $('#iniciar').click(
         function(){
             var q = {
-                valoresEsperados:[0,0,0,0],
+
+                valoresEsperados:[0,1,2,3],
                 stopCallback : function(mirar) {
 
                     console.log("mirar" + mirar);
