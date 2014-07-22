@@ -73,9 +73,6 @@
 
                     calcularTiempo();
 
-                    console.log("tiempo calculado uptime: " + q.upTime);
-                    console.log("tiempo calculado downtime: " + q.downTime);
-
                     q.timerHandle = setInterval( onTimerTick, q.timerDelay );
                 }
             }
@@ -94,14 +91,13 @@
             q.spinStart = duration;
             console.log("duration: " + duration);
 
+            progress = duration / (q.upTime + q.downTime);
+
             if (duration < q.upTime) {
 
                 //console.log("acelerando...");
-
-                progress = duration / (q.upTime + q.downTime);
                 //q.angleDelta = q.maxSpeed * Math.sin(progress * Math.PI / 2);
                 //mirar
-                console.log( "RAMDOM: " + ((Math.random() * (Math.PI/6)) + 0)/10);
 
                 q.angleDelta = q.maxSpeed;// * progress;
 
@@ -109,8 +105,6 @@
 
                 //finished = true;
                 //console.log("desacelerando............................");
-
-                progress = duration / (q.upTime + q.downTime);
                 //q.angleDelta = q.maxSpeed * Math.sin(progress * Math.PI / 2 + Math.PI / 2);
 
                 q.angleDelta =  q.maxSpeed;//*(1-progress);
@@ -222,7 +216,8 @@
         };
 
         var calcularTiempo = function() {
-            console.log("MIRAR:" + q.angulos[q.valoresEsperados[q.contadorIterations-1]]);
+
+            console.log("valor requerido: " + q.valoresEsperados[q.contadorIterations-1]);
             var angulo_esperado = q.angulos[q.valoresEsperados[q.contadorIterations-1]];
             console.log("mirar el angulo esperado: " + angulo_esperado);
             console.log("angulo actual: " + q.angleCurrent);
@@ -356,7 +351,8 @@
             q. angulos = angulos_guardados;//.sort(function(a, b){return b-a});
 
             console.log("angles son los angulos: " + q.angles);
-            console.log("angulos es el indice de angulos: " + q.angulos.sort());
+            //q.angulos.sort(ordenar);
+            console.log("angulos es el indice de angulos: " + q.angulos);
 
             // Draw a center circle
             ctx.beginPath();
@@ -378,9 +374,13 @@
             ctx.stroke();
         };
 
+        var ordenar = function(data_A, data_B){
+            return (data_B - data_A);
+        }
+
         var cargarNumeroSorteado = function(){
 
-            console.log("haber que pasa: " + q.valoresEsperados[q.contadorIterations-1]);
+            //console.log("haber que pasa: " + q.valoresEsperados[q.contadorIterations-1]);
             var numeros_sorteados = $('#numeros_sorteados p');
             numeros_sorteados.append(
                 //cargo los elementos
@@ -467,7 +467,7 @@ $(document).ready(function(){
         function(){
             var q = {
 
-                valoresEsperados:[0,1,2,3],
+                valoresEsperados:[7],
                 stopCallback : function(mirar) {
 
                     console.log("mirar" + mirar);

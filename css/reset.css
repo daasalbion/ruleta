@@ -28,9 +28,9 @@ table{
 }
 #canvas{
 
-    width: 25vw;
-    height: 25vw;
-    margin-left: 8vw;
+    width: 400px;
+    height: 400px;
+    margin-left: 200px;
 }
 #numeros_sorteados{
 
