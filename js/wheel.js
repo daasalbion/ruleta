@@ -154,10 +154,9 @@ var wheel = {
 
     initCanvas : function() {
 
-        var canvas = $('#canvas');
-        /*var canvas = $('#wheel #canvas').get(0);
+        var canvas = $('#wheel #canvas').get(0);
 
-        if ($.browser.msie) {
+        /*if ($.browser.msie) {
             canvas = document.createElement('canvas');
             $(canvas).attr('width', 300).attr('height', 300).attr('id', 'canvas').appendTo('.wheel');
             canvas = G_vmlCanvasManager.initElement(canvas);
