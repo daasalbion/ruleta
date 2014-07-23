@@ -55,7 +55,7 @@ var wheel = {
             if (wheel.timerHandle == 0) {
                 //wheel.spinStart = new Date().getTime();
                 //wheel.maxSpeed = Math.PI / (16 + Math.random()); // Randomly vary how hard the spin is
-                wheel.maxSpeed = Math.PI/5
+                wheel.maxSpeed = Math.PI/5;
                 wheel.frames = 0;
 
                 console.log("angulo actual: " + wheel.angleCurrent);
@@ -77,24 +77,24 @@ var wheel = {
         wheel.frames++;
         wheel.draw();
 
-        var progress = 0;
+        var progress;
         var finished = false;
         //var duration = (new Date().getTime() - wheel.spinStart);
         var duration = (wheel.timerDelay + wheel.spinStart);//avanza de manera constante
         wheel.spinStart = duration;
         console.log("duration: " + duration);
 
+        progress = duration / (wheel.upTime + wheel.downTime);
 
         if (duration < wheel.upTime) {
 
             //console.log("acelerando...");
             wheel.delta_numero_ganador = Math.PI/225;
-            progress = duration / (wheel.upTime + wheel.downTime);
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2);
             //mirar
             //wheel.delta_numero_ganador = (Math.random() * (Math.PI/125)) +  wheel.angleCurrent;
 
-            console.log( "RAMDOM: " + wheel.delta_numero_ganador);
+            //console.log( "RAMDOM: " + wheel.delta_numero_ganador);
 
             wheel.angleDelta = wheel.maxSpeed + wheel.delta_numero_ganador;// * progress;
 
@@ -103,7 +103,7 @@ var wheel = {
             //finished = true;
             //console.log("desacelerando............................");
             wheel.delta_numero_ganador = Math.PI/225;
-            progress = duration / (wheel.upTime + wheel.downTime);
+
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2 + Math.PI / 2);
 
             wheel.angleDelta =  wheel.maxSpeed - wheel.delta_numero_ganador;//*(1-progress);
@@ -153,13 +153,15 @@ var wheel = {
     },
 
     initCanvas : function() {
-        var canvas = $('#wheel #canvas').get(0);
+
+        var canvas = $('#canvas');
+        /*var canvas = $('#wheel #canvas').get(0);
 
         if ($.browser.msie) {
             canvas = document.createElement('canvas');
             $(canvas).attr('width', 300).attr('height', 300).attr('id', 'canvas').appendTo('.wheel');
             canvas = G_vmlCanvasManager.initElement(canvas);
-        }
+        }*/
 
         canvas.addEventListener("click", wheel.initIterations, false);
         wheel.canvasContext = canvas.getContext("2d");
@@ -362,7 +364,7 @@ var wheel = {
         ctx.fillText( wheel.segments[i], centerX, centerY - (size + 40) );
     }
 
-}
+};
 
 window.onload = function() {
 
@@ -390,7 +392,7 @@ window.onload = function() {
     wheel.segments = segments;
     wheel.update();
 
-}
+};
 
 
 
