@@ -30,8 +30,8 @@ var wheel = {
 
     frames : 0,
 
-    centerX : 200,
-    centerY : 200,
+    centerX : 300,
+    centerY : 300,
 
     valoresEsperados : [5,4],
     contadorIterations : 0,
@@ -239,9 +239,14 @@ var wheel = {
 
         ctx.beginPath();
 
-        ctx.moveTo(centerX + size - 40, centerY);
+        /*ctx.moveTo(centerX + size - 40, centerY);
         ctx.lineTo(centerX + size + 20, centerY - 10);
-        ctx.lineTo(centerX + size + 20, centerY + 10);
+        ctx.lineTo(centerX + size + 20, centerY + 10);*/
+
+        ctx.moveTo(centerX, centerY - size + 35);
+        ctx.lineTo(centerX - 15, centerY - size - 20);
+        ctx.lineTo(centerX + 15, centerY - size - 20);
+
         ctx.closePath();
 
         ctx.stroke();
@@ -251,11 +256,11 @@ var wheel = {
         var i = wheel.segments.length - Math.floor((wheel.angleCurrent / (Math.PI * 2))	* wheel.segments.length) - 1;
 
         // Now draw the winning name
-        ctx.textAlign = "left";
+        ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillStyle = '#000000';
         ctx.font = "2em Arial";
-        ctx.fillText(wheel.segments[i], centerX + size + 25, centerY);
+        ctx.fillText( wheel.segments[i], centerX, centerY - (size + 40) );
     },
 
     drawSegment : function(key, lastAngle, angle) {
@@ -380,8 +385,6 @@ window.onload = function() {
     console.log("numeros ganadores: " + wheel.valoresEsperados);
     wheel.segments = segments;
     wheel.update();
-
-
 
 }
 
