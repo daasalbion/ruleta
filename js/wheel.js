@@ -5,7 +5,7 @@ var wheel = {
     iterationsHandle: 0,
     timerDelay : 100,
 
-    initialAngle : Math.PI*3/2,
+    initialAngle : 0,//Math.PI*3/2,
     angleCurrent : 0,
     angleDelta : 0,
 
@@ -33,7 +33,7 @@ var wheel = {
     centerX : 300,
     centerY : 300,
 
-    valoresEsperados : [4],
+    valoresEsperados : [2, 4, 3, 4],
     contadorIterations : 0,
     angulos: [],
 
@@ -62,11 +62,7 @@ var wheel = {
                 console.log("angulos iniciales: " + wheel.angles);
 
                 wheel.calcularTiempo();
-
-                console.log("tiempo calculado uptime: " + wheel.upTime);
-                console.log("tiempo calculado downtime: " + wheel.downTime);
-
-                wheel.timerHandle = setInterval(wheel.onTimerTick, wheel.timerDelay);
+                wheel.timerHandle = setInterval( wheel.onTimerTick, wheel.timerDelay );
             }
         }
     },
@@ -85,11 +81,11 @@ var wheel = {
         console.log("duration: " + duration);
 
         progress = duration / (wheel.upTime + wheel.downTime);
+        //wheel.delta_numero_ganador = Math.PI/225;
 
         if (duration < wheel.upTime) {
 
             //console.log("acelerando...");
-            wheel.delta_numero_ganador = Math.PI/225;
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2);
             //mirar
             //wheel.delta_numero_ganador = (Math.random() * (Math.PI/125)) +  wheel.angleCurrent;
@@ -102,8 +98,6 @@ var wheel = {
 
             //finished = true;
             //console.log("desacelerando............................");
-            wheel.delta_numero_ganador = Math.PI/225;
-
             //wheel.angleDelta = wheel.maxSpeed * Math.sin(progress * Math.PI / 2 + Math.PI / 2);
 
             wheel.angleDelta =  wheel.maxSpeed - wheel.delta_numero_ganador;//*(1-progress);
@@ -213,7 +207,6 @@ var wheel = {
 
     calcularTiempo : function() {
 
-        console.log("MIRAR:" + wheel.angulos[wheel.valoresEsperados[wheel.contadorIterations-1]]);
         var angulo_esperado = wheel.angulos[wheel.valoresEsperados[wheel.contadorIterations-1]];
         console.log("mirar el angulo esperado: " + angulo_esperado);
         console.log("angulo actual: " + wheel.angleCurrent);
@@ -227,7 +220,7 @@ var wheel = {
         console.log("tiempo: " + tiempo);
                                                      //le agrego siempre 2 vueltas
         wheel.upTime = (tiempo)*wheel.timerDelay + Math.floor(wheel.numero_vueltas/2)*10*wheel.timerDelay;
-                                                                          //le agrego siempre 2 vueltas
+                                                     //le agrego siempre 2 vueltas
         wheel.downTime = Math.floor(wheel.numero_vueltas/2)*10*wheel.timerDelay;
     },
 
@@ -255,15 +248,14 @@ var wheel = {
         ctx.font         = "1.4em Arial";
 
         for (var i = 1; i <= len; i++) {
-            alert( "mirar: " + lastAngle );
             var angle = PI2 * (i / len) + angleCurrent;
             wheel.drawSegment(i - 1, lastAngle, angle);
-            wheel.angles[i] = lastAngle;
+            wheel.angles[i-1] = lastAngle;
             //guardo el orden de los angulos guardados
-            var j = wheel.segments.length - Math.floor((lastAngle / (Math.PI * 2))	* wheel.segments.length) - 1;
-            if(j<0)
+            var j = wheel.segments.length - Math.floor((lastAngle / (Math.PI * 2))	* wheel.segments.length) - 3;
+            if( j < 0 )
                 j = len - (-1)*j;
-            wheel.angulos[j] = wheel.angles[i];
+            wheel.angulos[j] = wheel.angles[i-1];
 
             lastAngle = angle;
         }
@@ -359,8 +351,9 @@ var wheel = {
         if( angleCurrent < 0 )
             angleCurrent = wheel.initialAngle + wheel.angleCurrent;
         alert(angleCurrent);*/
+        console.log('angleCurrent: '+wheel.angleCurrent);
         // Which segment is being pointed to?
-        var i = wheel.segments.length - Math.floor((wheel.angleCurrent / (Math.PI * 2))	* wheel.segments.length) - 1;
+        var i = wheel.segments.length - Math.floor((wheel.angleCurrent / (Math.PI * 2))	* wheel.segments.length) - 3;
 
         // Now draw the winning name
         ctx.textAlign = "center";
