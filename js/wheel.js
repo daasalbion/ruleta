@@ -154,7 +154,7 @@ var wheel = {
 
     initCanvas : function() {
 
-        var canvas = $('#wheel #canvas').get(0);
+        var canvas = $('#wheel').find('#canvas').get(0);
 
         /*if ($.browser.msie) {
             canvas = document.createElement('canvas');
@@ -255,6 +255,7 @@ var wheel = {
         ctx.font         = "1.4em Arial";
 
         for (var i = 1; i <= len; i++) {
+            alert( "mirar: " + lastAngle );
             var angle = PI2 * (i / len) + angleCurrent;
             wheel.drawSegment(i - 1, lastAngle, angle);
             wheel.angles[i] = lastAngle;
@@ -328,6 +329,7 @@ var wheel = {
     },
 
     drawNeedle : function() {
+
         var ctx = wheel.canvasContext;
         var centerX = wheel.centerX;
         var centerY = wheel.centerY;
@@ -352,6 +354,11 @@ var wheel = {
         ctx.stroke();
         ctx.fill();
 
+        //a ver que pasa
+        /*var angleCurrent = wheel.angleCurrent - wheel.initialAngle;
+        if( angleCurrent < 0 )
+            angleCurrent = wheel.initialAngle + wheel.angleCurrent;
+        alert(angleCurrent);*/
         // Which segment is being pointed to?
         var i = wheel.segments.length - Math.floor((wheel.angleCurrent / (Math.PI * 2))	* wheel.segments.length) - 1;
 
