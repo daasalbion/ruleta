@@ -5,6 +5,7 @@ var wheel = {
     iterationsHandle: 0,
     timerDelay : 100,
 
+    initialAngle : Math.PI*3/2,
     angleCurrent : 0,
     angleDelta : 0,
 
@@ -12,8 +13,7 @@ var wheel = {
 
     canvasContext : null,
 
-    colors : [ '#ffff00', '#ffc700', '#ff9100', '#ff6301', '#ff0000', '#c6037e',
-        '#713697', '#444ea1', '#2772b2', '#0297ba', '#008e5b', '#8ac819' ],
+    colors : [ '#ff0000', '#00FF00', '#FF00FF', '#FF6600', '#6699CC' ],
 
     segments : [],
 
@@ -23,8 +23,8 @@ var wheel = {
 
     maxSpeed : Math.PI / 16,
 
-    upTime : 100,// +5*100, // How long to spin up for (in ms)
-    downTime : 600+100,//+5*600, // How long to slow down for (in ms)
+    upTime : 0,// +5*100, // How long to spin up for (in ms)
+    downTime : 0,//+5*600, // How long to slow down for (in ms)
 
     spinStart : 0,
 
@@ -33,7 +33,7 @@ var wheel = {
     centerX : 300,
     centerY : 300,
 
-    valoresEsperados : [5,4],
+    valoresEsperados : [4],
     contadorIterations : 0,
     angulos: [],
 
@@ -177,7 +177,7 @@ var wheel = {
     update : function() {
         // Ensure we start mid way on a item
         //var r = Math.floor(Math.random() * wheel.segments.length);
-        var r = 0;
+        var r = wheel.initialAngle;
         //wheel.angleCurrent = ((r + 0.5) / wheel.segments.length) * Math.PI * 2;
         wheel.angleCurrent = r;
 
@@ -194,6 +194,9 @@ var wheel = {
         wheel.seg_color = seg_color;
 
         wheel.draw();
+
+        console.log( "angulos iniciales: " + wheel.angles );
+        console.log( "angulos indices: " + wheel.angulos );
     },
 
     draw : function() {
@@ -225,82 +228,6 @@ var wheel = {
         wheel.upTime = (tiempo)*wheel.timerDelay + Math.floor(wheel.numero_vueltas/2)*10*wheel.timerDelay;
                                                                           //le agrego siempre 2 vueltas
         wheel.downTime = Math.floor(wheel.numero_vueltas/2)*10*wheel.timerDelay;
-    },
-
-    drawNeedle : function() {
-        var ctx = wheel.canvasContext;
-        var centerX = wheel.centerX;
-        var centerY = wheel.centerY;
-        var size = wheel.size;
-
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = '#000000';
-        ctx.fileStyle = '#ffffff';
-
-        ctx.beginPath();
-
-        /*ctx.moveTo(centerX + size - 40, centerY);
-        ctx.lineTo(centerX + size + 20, centerY - 10);
-        ctx.lineTo(centerX + size + 20, centerY + 10);*/
-
-        ctx.moveTo(centerX, centerY - size + 35);
-        ctx.lineTo(centerX - 15, centerY - size - 20);
-        ctx.lineTo(centerX + 15, centerY - size - 20);
-
-        ctx.closePath();
-
-        ctx.stroke();
-        ctx.fill();
-
-        // Which segment is being pointed to?
-        var i = wheel.segments.length - Math.floor((wheel.angleCurrent / (Math.PI * 2))	* wheel.segments.length) - 1;
-
-        // Now draw the winning name
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = '#000000';
-        ctx.font = "2em Arial";
-        ctx.fillText( wheel.segments[i], centerX, centerY - (size + 40) );
-    },
-
-    drawSegment : function(key, lastAngle, angle) {
-        var ctx = wheel.canvasContext;
-        var centerX = wheel.centerX;
-        var centerY = wheel.centerY;
-        var size = wheel.size;
-
-        var segments = wheel.segments;
-        var len = wheel.segments.length;
-        var colors = wheel.seg_color;
-
-        var value = segments[key];
-
-        ctx.save();
-        ctx.beginPath();
-
-        // Start in the centre
-        ctx.moveTo(centerX, centerY);
-        ctx.arc(centerX, centerY, size, lastAngle, angle, false); // Draw a arc around the edge
-        ctx.lineTo(centerX, centerY); // Now draw a line back to the centre
-
-        // Clip anything that follows to this area
-        //ctx.clip(); // It would be best to clip, but we can double performance without it
-        ctx.closePath();
-
-        ctx.fillStyle = colors[key];
-        ctx.fill();
-        ctx.stroke();
-
-        // Now draw the text
-        ctx.save(); // The save ensures this works on Android devices
-        ctx.translate(centerX, centerY);
-        ctx.rotate((lastAngle + angle) / 2);
-
-        ctx.fillStyle = '#000000';
-        ctx.fillText(value.substr(0, 20), size / 2 + 20, 0);
-        ctx.restore();
-
-        ctx.restore();
     },
 
     drawWheel : function() {
@@ -357,7 +284,84 @@ var wheel = {
         ctx.lineWidth   = 10;
         ctx.strokeStyle = '#000000';
         ctx.stroke();
+    },
+
+    drawSegment : function(key, lastAngle, angle) {
+        var ctx = wheel.canvasContext;
+        var centerX = wheel.centerX;
+        var centerY = wheel.centerY;
+        var size = wheel.size;
+
+        var segments = wheel.segments;
+        var len = wheel.segments.length;
+        var colors = wheel.seg_color;
+
+        var value = segments[key];
+
+        ctx.save();
+        ctx.beginPath();
+
+        // Start in the centre
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, size, lastAngle, angle, false); // Draw a arc around the edge
+        ctx.lineTo(centerX, centerY); // Now draw a line back to the centre
+
+        // Clip anything that follows to this area
+        //ctx.clip(); // It would be best to clip, but we can double performance without it
+        ctx.closePath();
+
+        ctx.fillStyle = colors[key];
+        ctx.fill();
+        ctx.stroke();
+
+        // Now draw the text
+        ctx.save(); // The save ensures this works on Android devices
+        ctx.translate(centerX, centerY);
+        ctx.rotate((lastAngle + angle) / 2);
+
+        ctx.fillStyle = '#000000';
+        ctx.fillText(value.substr(0, 20), size / 2 + 20, 0);
+        ctx.restore();
+
+        ctx.restore();
+    },
+
+    drawNeedle : function() {
+        var ctx = wheel.canvasContext;
+        var centerX = wheel.centerX;
+        var centerY = wheel.centerY;
+        var size = wheel.size;
+
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = '#000000';
+        ctx.fileStyle = '#ffffff';
+
+        ctx.beginPath();
+
+        /*ctx.moveTo(centerX + size - 40, centerY);
+         ctx.lineTo(centerX + size + 20, centerY - 10);
+         ctx.lineTo(centerX + size + 20, centerY + 10);*/
+
+        ctx.moveTo(centerX, centerY - size + 35);
+        ctx.lineTo(centerX - 15, centerY - size - 20);
+        ctx.lineTo(centerX + 15, centerY - size - 20);
+
+        ctx.closePath();
+
+        ctx.stroke();
+        ctx.fill();
+
+        // Which segment is being pointed to?
+        var i = wheel.segments.length - Math.floor((wheel.angleCurrent / (Math.PI * 2))	* wheel.segments.length) - 1;
+
+        // Now draw the winning name
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = '#000000';
+        ctx.font = "2em Arial";
+        ctx.fillText( wheel.segments[i], centerX, centerY - (size + 40) );
     }
+
 }
 
 window.onload = function() {
