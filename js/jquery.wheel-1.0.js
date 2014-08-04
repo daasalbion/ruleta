@@ -261,6 +261,7 @@
             for (var i = 1; i <= len; i++) {
                 var angle = PI2 * (i / len) + angleCurrent;
                 drawSegment(i - 1, lastAngle, angle);
+                alert('ok');
                 q.angles[i-1] = lastAngle;
                 //guardo el orden de los angulos guardados
                 var j = q.segments.length - Math.floor((lastAngle / (Math.PI * 2))	* q.segments.length) - 3;
